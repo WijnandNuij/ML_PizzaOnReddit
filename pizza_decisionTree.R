@@ -77,6 +77,15 @@ loadTestData <- function(location='/home/wijnand/R_workspace_pizza/resources/tes
         pizzaTable <- as.data.table(jsonData)
         pizzaTable <- pizzaTable[,!c("giver_username_if_known", "request_text_edit_aware", "request_title", 
                                      "requester_subreddits_at_request", "requester_username"),with=FALSE]
+        
+        pizzaTable <- addColumns(pizzaTable)
+}
+
+addColumns <- function(pizza)
+{
+        pizza <- addPostDayOfMonth(pizza)
+        pizza <- addPostDayOfWeek(pizza)
+        pizza <- addPostHour(pizza)
 }
 
 loadData <- function(location='/home/wijnand/R_workspace_pizza/resources/train.json')
@@ -105,10 +114,5 @@ loadData <- function(location='/home/wijnand/R_workspace_pizza/resources/train.j
                                     ,with=FALSE]
         
         pizzaTable <- pizzaTable[,!c("giver_username_if_known", "request_text_edit_aware", "request_title"),with=FALSE]
-}
-
-crosstables <- function(data, var="requester_received_pizza")
-{
-        require(gmodels)
-        CrossTable(pizza[[var]])
+        pizzaTable <- addColumns(pizzaTable)
 }
